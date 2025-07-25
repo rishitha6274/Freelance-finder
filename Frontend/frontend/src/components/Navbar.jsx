@@ -29,12 +29,18 @@ const Navbar = () => {
 
       <style>{`
         .navbar {
+       
           display: flex;
           justify-content: space-between;
           align-items: center;
           padding: 1rem 2rem;
-          background-color: grey;
-          color: white;
+          background: transparent;
+  position: absolute;
+  width: 95%;
+  top: 0;
+  left: 0;
+  color: white;
+  z-index: 10;
         }
         .logo {
           font-size: 1.5rem;

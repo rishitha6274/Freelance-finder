@@ -1,11 +1,31 @@
+import { Rocket } from "lucide-react";
+
 const HeroSection = () => {
   return (
     <>
       <section className="hero">
-        <h1 className="hero-title">Connect Emerging Talent with Honest Clients.</h1>
+        <h1 className="hero-title">
+          The Future of <br /> Freelancing, Rewired...
+        </h1>
         <p className="hero-subtitle">
-          Post a job, hire a freelancer, and pay securely – all in one place.
+          Where New Talent Gets the Spotlight !! <br />
+          You Bring the Skill. We Bring the Stage.
         </p>
+        <h4>
+          {" "}
+          <Rocket
+            style={{ width: "24px", height: "24px", color: "#fff" }}
+          />{" "}
+          Welcome to the platform where being underrated is your superpower.
+        </h4>
+        <h4>
+          {" "}
+          <Rocket
+            style={{ width: "28px", height: "28px", color: "#fff" }}
+          />{" "}
+          You don’t need a portfolio. You need a shot. We’ve got it.
+        </h4>
+
         <div className="hero-cta">
           <button className="btn btn-primary">I’m a Freelancer</button>
           <button className="btn btn-secondary">I’m a Client</button>
@@ -42,11 +62,29 @@ const HeroSection = () => {
 
       <style>{`
         .hero {
-          padding: 4rem 2rem;
-          text-align: center;
-          background: linear-gradient(135deg, #4a90e2, #6c63ff);
-          color: white;
-        }
+  position: relative;
+  padding: 4rem 2rem;
+  color: white;
+  background: url('https://v1.pinimg.com/videos/mc/720p/83/e6/f4/83e6f4689c1025201ce25e0a3225f72e.mp4') no-repeat center center/cover;
+  filter: brightness(1.9);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #031b36cc, #01070ecc);
+  z-index: 0;
+}
+
+.hero * {
+  position: relative;
+  z-index: 1; 
+}
+
 
         .hero-title {
           font-size: 2.5rem;
@@ -91,7 +129,8 @@ const HeroSection = () => {
         .testimonials, .features, .trust-badges, .blog-preview {
           text-align: center;
           padding: 2rem 1rem;
-          background: #f9f9f9;
+          background: #031b36ff;
+          color: white;
         
         }
 
@@ -106,7 +145,7 @@ const HeroSection = () => {
 
         .badges span {
           margin: 0 0.5rem;
-          background: #4a90e2;
+          background: #031b36ff;
           color: white;
           padding: 0.3rem 0.8rem;
           border-radius: 3px;
