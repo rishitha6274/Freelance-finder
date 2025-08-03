@@ -1,116 +1,94 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("client"); // default role
+  const [name, setName] = useState(""); // optional: collect name
+  const [error, setError] = useState("");
+
+  const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Login with:", email, password);
+
+    if (!email || !role) {
+      setError("Please enter email and select a role.");
+      return;
+    }
+
+    const payload = {
+      name: name || "Guest",
+      email,
+      role,
+    };
+
+    login(payload);
+
+    // Navigate based on role
+    if (role === "client") {
+      navigate("/dashboard/client");
+    } else if (role === "freelancer") {
+      navigate("/dashboard/freelancer");
+    } else {
+      setError("Invalid role selected.");
+    }
   };
 
   return (
-    <>
-      <div className="login-container">
-        <h2 className="login-title">Welcome Back!</h2>
-        <p className="login-subtitle">Login to your Freelance Finder account</p>
-        <form onSubmit={handleSubmit} className="login-form">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit" className="btn-login">Login</button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-6">
+      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Login</h2>
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block mb-1 text-gray-700">Email</label>
+            <input
+              type="email"
+              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-gray-700">Name (optional)</label>
+            <input
+              type="text"
+              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-gray-700">Role</label>
+            <select
+              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="client">Client</option>
+              <option value="freelancer">Freelancer</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          >
+            Login
+          </button>
         </form>
-        <p className="signup-link">
-          Don't have an account? <a href="/signup">Sign Up</a>
-        </p>
       </div>
-
-      <style>{`
-        .login-container {
-          max-width: 400px;
-          margin: 4rem auto;
-          padding: 2rem;
-          border-radius: 8px;
-          background: #f9f9f9;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-          text-align: center;
-        }
-
-        .login-title {
-          font-size: 1.8rem;
-          font-weight: bold;
-          margin-bottom: 0.5rem;
-        }
-
-        .login-subtitle {
-          font-size: 1rem;
-          margin-bottom: 2rem;
-          color: #555;
-        }
-
-        .login-form {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .login-form input {
-          padding: 0.7rem;
-          font-size: 1rem;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          outline: none;
-          transition: border 0.3s;
-        }
-
-        .login-form input:focus {
-          border-color: #4a90e2;
-        }
-
-        .btn-login {
-          padding: 0.8rem;
-          font-size: 1rem;
-          font-weight: bold;
-          background-color: #4a90e2;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: transform 0.2s;
-        }
-
-        .btn-login:hover {
-          transform: scale(1.05);
-          background-color: #3b7dd8;
-        }
-
-        .signup-link {
-          margin-top: 1.5rem;
-          font-size: 0.9rem;
-        }
-
-        .signup-link a {
-          color: #4a90e2;
-          text-decoration: none;
-          font-weight: bold;
-        }
-
-        .signup-link a:hover {
-          text-decoration: underline;
-        }
-      `}</style>
-    </>
+    </div>
   );
 };
 

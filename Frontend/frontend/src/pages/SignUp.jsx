@@ -1,19 +1,43 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
+  const [role, setRole] = useState("freelancer");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    console.log("Signup with:", { name, email, password });
-    // Later: connect this to backend API
+
+    if (!email.includes("@")) {
+      alert("Enter a valid email address");
+      return;
+    }
+
+    const user = {
+      name,
+      email,
+      role,
+    };
+
+    login(user); // store in context and localStorage
+
+    if (role === "freelancer") {
+      navigate("/freelancerlanding");
+    } else {
+      navigate("/clientlanding");
+    }
   };
 
   return (
@@ -21,7 +45,12 @@ const Signup = () => {
       <div className="signup-container">
         <h2 className="signup-title">Create Your Account</h2>
         <p className="signup-subtitle">Join Freelance Finder today</p>
+
         <form onSubmit={handleSubmit} className="signup-form">
+          <select value={role} onChange={(e) => setRole(e.target.value)} className="role-selector" required>
+            <option value="freelancer">I'm a Freelancer</option>
+            <option value="client">I'm a Client</option>
+          </select>
           <input
             type="text"
             placeholder="Full Name"
@@ -52,12 +81,12 @@ const Signup = () => {
           />
           <button type="submit" className="btn-signup">Sign Up</button>
         </form>
+
         <p className="login-link">
-          Already have an account? <a href="/login">Login</a>
+          Already have an account? <a href="/login?role=freelancer">Login</a>
         </p>
       </div>
 
-      {/* Inline CSS */}
       <style>{`
         .signup-container {
           max-width: 400px;
@@ -87,7 +116,7 @@ const Signup = () => {
           gap: 1rem;
         }
 
-        .signup-form input {
+        .signup-form input, .role-selector {
           padding: 0.7rem;
           font-size: 1rem;
           border: 1px solid #ccc;
@@ -96,7 +125,7 @@ const Signup = () => {
           transition: border 0.3s;
         }
 
-        .signup-form input:focus {
+        .signup-form input:focus, .role-selector:focus {
           border-color: #4a90e2;
         }
 

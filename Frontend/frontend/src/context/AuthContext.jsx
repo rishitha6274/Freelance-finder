@@ -3,8 +3,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); 
-  // user example: { id, name, role: 'client' | 'freelancer', token }
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("ff_user");
@@ -12,19 +11,21 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (payload) => {
-    // payload should come from your backend login API
-    // e.g. { id, name, role, token }
     setUser(payload);
     localStorage.setItem("ff_user", JSON.stringify(payload));
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("role", payload.role);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("ff_user");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("role");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
