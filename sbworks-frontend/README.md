@@ -1,73 +1,172 @@
-# Welcome to your Lovable project
+# React + TypeScript + Vite
 
-## Project info
+SB Works – MERN Freelancing Platform
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+SB Works is a full-stack freelancing web application built using the MERN stack.
+It connects clients with freelancers, allowing clients to post jobs and freelancers to apply, bid, and collaborate securely on projects.
 
-## How can I edit this code?
+The platform follows a client–server architecture, uses RESTful APIs, and stores data in MongoDB with proper schema design and relationships.
 
-There are several ways of editing your application.
+Tech Stack
+Frontend
 
-**Use Lovable**
+React.js
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+HTML5, CSS3, JavaScript
 
-Changes made via Lovable will be committed automatically to this repo.
+Bootstrap
 
-**Use your preferred IDE**
+Material UI
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Axios
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+React Router
 
-Follow these steps:
+Backend
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Node.js
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Express.js
 
-# Step 3: Install the necessary dependencies.
-npm i
+JWT Authentication
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Database
+
+MongoDB
+
+Mongoose ODM
+
+User Roles
+
+Client
+
+Post jobs
+
+View applicants
+
+Accept or reject freelancers
+
+Review completed work
+
+Freelancer
+
+Browse available jobs
+
+Apply for jobs
+
+Track application status
+
+View feedback and notifications
+
+Admin
+
+Manage users
+
+Block/unblock accounts
+
+Monitor jobs and platform activity
+
+Core Features
+Authentication & Authorization
+
+Secure signup and login
+
+JWT-based authentication
+
+Role-based access control
+
+Job Management
+
+Clients can post jobs with budget and description
+
+Freelancers can apply to jobs
+
+Application status tracking (applied / accepted / rejected)
+
+Notifications
+
+Clients receive notifications when freelancers apply
+
+Freelancers receive notifications on application updates
+
+Reviews & Ratings
+
+Clients can review freelancers after job completion
+
+Freelancer profiles track completed jobs
+
+Admin Controls
+
+View all users
+
+Block users when required
+
+View all posted jobs
+
+Database Collections (MongoDB)
+
+Users
+
+Jobs
+
+Bids
+
+Reviews
+
+Notifications
+
+Payments
+
+Each collection uses:
+
+ObjectId references
+
+Indexing for performance
+
+Timestamps for tracking activity
+
+Project Structure
+SB-Works/
+│
+├── sbworks-backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middleware/
+│   ├── config/
+│   └── index.js
+│
+├── sbworks-frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   ├── services/
+│   │   └── App.jsx
+│
+└── README.md
+
+Setup Instructions
+Backend Setup
+cd sbworks-backend
+npm install
+node index.js
+
+
+Create a .env file:
+
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+
+Frontend Setup
+cd sbworks-frontend
+npm install
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+API Architecture
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+RESTful APIs using Express.js
 
-**Use GitHub Codespaces**
+Axios for frontend–backend communication
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Protected routes using JWT middleware

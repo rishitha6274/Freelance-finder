@@ -42,15 +42,21 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-primary-foreground" />
+              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md flex items-center justify-center">
+                <img
+                  src="/logo.png"
+                  alt="SBWorks Logo"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <span className="text-xl font-bold text-background">
                 SB<span className="text-primary">Works</span>
               </span>
             </Link>
+
             <p className="text-background/60 text-sm mb-6 max-w-xs">
-              Connecting emerging talent with honest clients. Build your career, find amazing freelancers.
+              Connecting emerging talent with honest clients. Build your career,
+              find amazing freelancers.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (
