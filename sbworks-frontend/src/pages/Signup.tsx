@@ -16,7 +16,7 @@ import {
   Github,
   Chrome,
 } from "lucide-react";
-import API from "@/lib/axios"; // ✅ use central API
+import API from "@/lib/axios"; 
 
 const Signup = () => {
   const [role, setRole] = useState<"freelancer" | "client">("freelancer");
@@ -29,7 +29,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      await API.post("/auth/register", {
+      await API.post("http://localhost:5001/api/auth/register", {
         name,
         email,
         password,
@@ -37,7 +37,7 @@ const Signup = () => {
       });
 
       alert("Signup successful");
-      navigate("/login"); // ✅ let login handle role routing
+      navigate("/login"); 
     } catch (error: any) {
       alert(error.response?.data?.message || "Signup failed");
     }

@@ -11,7 +11,7 @@ const ClientDashboard = () => {
 
   const fetchJobs = async () => {
     try {
-      const res = await API.get("/jobs/my/posted");
+      const res = await API.get("http://localhost:5001/jobs/my/posted");
       setJobs(res.data);
     } finally {
       setLoading(false);
@@ -28,7 +28,7 @@ const ClientDashboard = () => {
     status: "accepted" | "rejected"
   ) => {
     try {
-      await API.put(`/jobs/${jobId}/applications/${freelancerId}`, { status });
+      await API.put(`http://localhost:5001/jobs/${jobId}/applications/${freelancerId}`, { status });
       fetchJobs();
     } catch (err: any) {
       alert(err.response?.data?.message || "Action failed");

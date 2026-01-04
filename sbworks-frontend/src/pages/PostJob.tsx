@@ -16,13 +16,13 @@ const PostJob = () => {
     e.preventDefault();
 
     try {
-      await API.post("/jobs", {
+      await API.post("http://localhost:5001/jobs", {
         title,
         description,
         budget,
       });
 
-      navigate("/jobs");
+      navigate("http://localhost:5001/jobs");
     } catch (error: any) {
       alert(error.response?.data?.message || "Failed to post job");
     }

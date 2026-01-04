@@ -16,7 +16,7 @@ const Jobs = () => {
 
   useEffect(() => {
     // fetch all jobs
-    API.get("/jobs")
+    API.get("http://localhost:5001/jobs")
       .then((res) => setJobs(res.data))
       .catch(() => {
         localStorage.removeItem("token");
@@ -24,7 +24,7 @@ const Jobs = () => {
       });
 
     // ✅ fetch already applied jobs
-    API.get("/jobs/my/applications").then((res) => {
+    API.get("http://localhost:5001/jobs/my/applications").then((res) => {
       const ids = res.data.map((job: any) => job._id);
       setAppliedJobs(ids);
     });
@@ -42,7 +42,7 @@ const Jobs = () => {
     if (appliedJobs.includes(jobId)) return;
 
     try {
-      await API.post(`/jobs/${jobId}/apply`);
+      await API.post(`http://localhost:5001/jobs/${jobId}/apply`);
       setAppliedJobs((prev) => [...prev, jobId]);
     } catch (error: any) {
       alert(error.response?.data?.message || "Failed to apply");

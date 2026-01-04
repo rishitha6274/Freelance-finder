@@ -8,7 +8,7 @@ const {
   updateBidStatus,
 } = require("../controllers/bidController");
 
-const protect = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 router.get("/my", protect, getMyBids);
 

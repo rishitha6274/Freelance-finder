@@ -8,7 +8,7 @@ const {
   getAllJobs,
 } = require("../controllers/adminController");
 
-const protect = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 router.get("/users", protect, getAllUsers);
 

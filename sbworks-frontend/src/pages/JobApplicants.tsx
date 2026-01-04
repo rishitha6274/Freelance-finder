@@ -12,7 +12,7 @@ const JobApplicants = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    API.get("/jobs/my/posted").then((res) => {
+    API.get("http://localhost:5001/jobs/my/posted").then((res) => {
       const foundJob = res.data.find((j: any) => j._id === jobId);
       setJob(foundJob);
       setLoading(false);

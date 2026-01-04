@@ -33,7 +33,7 @@ const FreelancerDashboard = () => {
   const [jobs, setJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Extract logged-in userId from JWT
+  
   const userId = useMemo(() => {
     const token = localStorage.getItem("token");
     if (!token) return null;
@@ -45,7 +45,7 @@ const FreelancerDashboard = () => {
   }, []);
 
   useEffect(() => {
-    API.get("/jobs/my/applications")
+    API.get("http://localhost:5001/jobs/my/applications")
       .then((res) => setJobs(res.data))
       .finally(() => setLoading(false));
   }, []);

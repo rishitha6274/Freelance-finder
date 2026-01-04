@@ -7,7 +7,7 @@ const {
   getMyPayments,
 } = require("../controllers/paymentController");
 
-const protect = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 router.post("/", protect, createPayment);
 router.put("/:paymentId/release", protect, releasePayment);

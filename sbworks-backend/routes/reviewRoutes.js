@@ -6,7 +6,7 @@ const {
   getReviewsForFreelancer,
 } = require("../controllers/reviewController");
 
-const protect = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 router.post("/", protect, createReview);
 

@@ -10,7 +10,7 @@ const {
   updateApplicationStatus,
 } = require("../controllers/jobController");
 
-const protect = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 router.get("/", getJobs);
 router.post("/", protect, createJob);
