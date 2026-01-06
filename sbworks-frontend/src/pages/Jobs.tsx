@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -10,42 +10,50 @@ import { DollarSign, Bookmark, CheckCircle } from "lucide-react";
 
 const Jobs = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [jobs, setJobs] = useState<any[]>([]);
-  const [appliedJobs, setAppliedJobs] = useState<string[]>([]);
-  const [savedJobs, setSavedJobs] = useState<string[]>([]);
+  const [jobs, setJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
+  const [savedJobs, setSavedJobs] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // fetch all jobs
-    API.get("http://localhost:5001/jobs")
-      .then((res) => setJobs(res.data))
-      .catch(() => {
+    const fetchJobs = async () => {
+      try {
+        const res = await API.get("/jobs");
+        setJobs(res.data);
+      } catch (err) {
         localStorage.removeItem("token");
-        window.location.href = "/login";
-      });
+        navigate("/login");
+      }
 
-    // ✅ fetch already applied jobs
-    API.get("http://localhost:5001/jobs/my/applications").then((res) => {
-      const ids = res.data.map((job: any) => job._id);
-      setAppliedJobs(ids);
-    });
-  }, []);
+      try {
+        const resApplied = await API.get("/jobs/my/applications");
+        const ids = resApplied.data.map(job => job._id);
+        setAppliedJobs(ids);
+      } catch (err) {
+        // fail silently
+        console.error("Failed to fetch applied jobs", err);
+      }
+    };
 
-  const toggleSaveJob = (jobId: string) => {
-    setSavedJobs((prev) =>
+    fetchJobs();
+  }, [navigate]);
+
+  const toggleSaveJob = (jobId) => {
+    setSavedJobs(prev =>
       prev.includes(jobId)
-        ? prev.filter((id) => id !== jobId)
+        ? prev.filter(id => id !== jobId)
         : [...prev, jobId]
     );
   };
 
-  const handleApply = async (jobId: string) => {
+  const handleApply = async (jobId) => {
     if (appliedJobs.includes(jobId)) return;
 
     try {
-      await API.post(`http://localhost:5001/jobs/${jobId}/apply`);
-      setAppliedJobs((prev) => [...prev, jobId]);
-    } catch (error: any) {
-      alert(error.response?.data?.message || "Failed to apply");
+      await API.post(`/jobs/${jobId}/apply`);
+      setAppliedJobs(prev => [...prev, jobId]);
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to apply");
     }
   };
 
@@ -78,67 +86,66 @@ const Jobs = () => {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <p className="mb-6 text-muted-foreground">
-            <span className="font-semibold text-foreground">
-              {jobs.length}
-            </span>{" "}
-            jobs found
+            <span className="font-semibold text-foreground">{jobs.length}</span> jobs found
           </p>
 
           <div className="space-y-4">
-            {jobs.map((job) => {
-              const isApplied = appliedJobs.includes(job._id);
+            {jobs
+              .filter(job =>
+                job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                job.description.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+              .map(job => {
+                const isApplied = appliedJobs.includes(job._id);
 
-              return (
-                <motion.div
-                  key={job._id}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-card rounded-xl p-6 border border-border"
-                >
-                  <Link
-                    to={`/jobs/${job._id}`}
-                    className="text-xl font-bold hover:text-primary"
+                return (
+                  <motion.div
+                    key={job._id}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-card rounded-xl p-6 border border-border"
                   >
-                    {job.title}
-                  </Link>
-
-                  <p className="text-muted-foreground mt-1">
-                    {job.description}
-                  </p>
-
-                  <div className="flex items-center gap-2 mt-3 text-sm">
-                    <DollarSign className="w-4 h-4" />
-                    {job.budget}
-                  </div>
-
-                  <div className="flex gap-2 mt-4">
-                    <Button
-                      variant={isApplied ? "outline" : "gradient"}
-                      disabled={isApplied}
-                      onClick={() => handleApply(job._id)}
-                      className="flex items-center gap-2"
+                    <Link
+                      to={`/jobs/${job._id}`}
+                      className="text-xl font-bold hover:text-primary"
                     >
-                      {isApplied ? (
-                        <>
-                          <CheckCircle className="w-4 h-4" />
-                          Applied
-                        </>
-                      ) : (
-                        "Apply"
-                      )}
-                    </Button>
+                      {job.title}
+                    </Link>
 
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => toggleSaveJob(job._id)}
-                    >
-                      <Bookmark className="w-5 h-5" />
-                    </Button>
-                  </div>
-                </motion.div>
-              );
-            })}
+                    <p className="text-muted-foreground mt-1">{job.description}</p>
+
+                    <div className="flex items-center gap-2 mt-3 text-sm">
+                      <DollarSign className="w-4 h-4" />
+                      {job.budget}
+                    </div>
+
+                    <div className="flex gap-2 mt-4">
+                      <Button
+                        variant={isApplied ? "outline" : "gradient"}
+                        disabled={isApplied}
+                        onClick={() => handleApply(job._id)}
+                        className="flex items-center gap-2"
+                      >
+                        {isApplied ? (
+                          <>
+                            <CheckCircle className="w-4 h-4" /> Applied
+                          </>
+                        ) : (
+                          "Apply"
+                        )}
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => toggleSaveJob(job._id)}
+                      >
+                        <Bookmark className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  </motion.div>
+                );
+              })}
           </div>
         </div>
       </section>

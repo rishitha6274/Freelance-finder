@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -10,21 +10,45 @@ const PostJob = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [budget, setBudget] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handlePostJob = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Protect route: client only
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
     try {
-      await API.post("http://localhost:5001/jobs", {
-        title,
-        description,
-        budget,
-      });
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      if (payload.role !== "client") {
+        alert("Only clients can post jobs");
+        navigate("/jobs");
+      }
+    } catch (err) {
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+  }, [navigate]);
 
-      navigate("http://localhost:5001/jobs");
-    } catch (error: any) {
-      alert(error.response?.data?.message || "Failed to post job");
+  const handlePostJob = async (e) => {
+    e.preventDefault();
+
+    if (!title.trim() || !description.trim() || !budget.trim()) {
+      alert("All fields are required");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await API.post("/jobs", { title, description, budget });
+      navigate("/jobs");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to post job");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,8 +78,13 @@ const PostJob = () => {
             onChange={(e) => setBudget(e.target.value)}
           />
 
-          <Button variant="gradient" type="submit" className="w-full">
-            Post Job
+          <Button
+            variant="gradient"
+            type="submit"
+            className="w-full"
+            disabled={loading}
+          >
+            {loading ? "Posting..." : "Post Job"}
           </Button>
         </form>
       </div>

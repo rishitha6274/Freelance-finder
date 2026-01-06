@@ -26,13 +26,12 @@ const Login = () => {
         }
       );
 
-      localStorage.setItem("token", res.data.token);
+     const { token, role } = res.data;
+localStorage.setItem("token", token);
+localStorage.setItem("role", role);
 
-      if (res.data.role === "freelancer") {
-        navigate("/freelancer-dashboard");
-      } else {
-        navigate("/client-dashboard");
-      }
+navigate(role === "freelancer" ? "/freelancer-dashboard" : "/client-dashboard");
+
     } catch (error: any) {
       alert(error.response?.data?.message || "Login failed");
     }

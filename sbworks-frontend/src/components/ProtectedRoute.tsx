@@ -16,10 +16,15 @@ const ProtectedRoute = ({ children, allowedRoles }: Props) => {
 
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));
-    const role: Role = payload.role;
+    const role = payload.role;
+
+    if (!role) {
+      localStorage.removeItem("token");
+      return <Navigate to="/login" replace />;
+    }
 
     if (allowedRoles && !allowedRoles.includes(role)) {
-      return <Navigate to="/" replace />;
+      return <Navigate to={`/${role}-dashboard`} replace />;
     }
 
     return children;

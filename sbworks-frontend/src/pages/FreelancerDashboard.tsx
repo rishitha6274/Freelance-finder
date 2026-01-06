@@ -33,22 +33,25 @@ const FreelancerDashboard = () => {
   const [jobs, setJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  
+  // ✅ Extract logged-in userId from JWT
   const userId = useMemo(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return null;
-    try {
-      return JSON.parse(atob(token.split(".")[1])).id;
-    } catch {
-      return null;
-    }
-  }, []);
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    return JSON.parse(atob(token.split(".")[1]))._id; // fixed
+  } catch {
+    return null;
+  }
+}, []);
 
-  useEffect(() => {
-    API.get("http://localhost:5001/jobs/my/applications")
-      .then((res) => setJobs(res.data))
-      .finally(() => setLoading(false));
-  }, []);
+useEffect(() => {
+  API.get("/jobs/my/applications", {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  })
+    .then((res) => setJobs(res.data))
+    .finally(() => setLoading(false));
+}, []);
+
 
   return (
     <div className="min-h-screen bg-background">

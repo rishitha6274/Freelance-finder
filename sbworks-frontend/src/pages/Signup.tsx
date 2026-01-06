@@ -16,7 +16,7 @@ import {
   Github,
   Chrome,
 } from "lucide-react";
-import API from "@/lib/axios"; 
+import API from "@/lib/axios"; // ✅ use central API
 
 const Signup = () => {
   const [role, setRole] = useState<"freelancer" | "client">("freelancer");
@@ -29,7 +29,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      await API.post("http://localhost:5001/api/auth/register", {
+      await API.post("/auth/register", {
         name,
         email,
         password,
@@ -37,7 +37,7 @@ const Signup = () => {
       });
 
       alert("Signup successful");
-      navigate("/login"); 
+      navigate("/login"); // ✅ let login handle role routing
     } catch (error: any) {
       alert(error.response?.data?.message || "Signup failed");
     }
@@ -71,7 +71,7 @@ const Signup = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-primary-foreground">
-                      StudentPass™️ Benefits
+                      StudentPass™ Benefits
                     </h3>
                     <p className="text-primary-foreground/60 text-sm">
                       0% commission on first 3 jobs.
