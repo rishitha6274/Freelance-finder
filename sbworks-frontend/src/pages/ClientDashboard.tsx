@@ -73,7 +73,6 @@ const ClientDashboard = () => {
                 <DollarSign className="w-4 h-4" />
                 {job.budget}
               </div>
-
               <div className="flex items-center gap-2 mt-4 text-sm font-medium">
                 <Users className="w-4 h-4 text-primary" />
                 {job.applications.length} Applicants
